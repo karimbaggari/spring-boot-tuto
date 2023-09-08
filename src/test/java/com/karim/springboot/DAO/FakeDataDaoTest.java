@@ -29,7 +29,7 @@ class FakeDataDaoTest {
     @Test
     void shouldSelectAllUsers() throws Exception {
        List<User> users = fakeDataDao.selectAllUsers();
-       assertThat(users).hasSize(1);
+       assertThat(users).hasSize(2);
        User user = users.get(0);
        assertThat(user.getAge()).isEqualTo(22);
         assertThat(user.getFirstName()).isEqualTo("Joe");
@@ -43,16 +43,9 @@ class FakeDataDaoTest {
     void selectUserByUserUid() {
         UUID joeUserId = fakeDataDao.selectAllUsers().get(0).getUserUid();
         Optional<User> joeOptional = fakeDataDao.selectUserByUserUid(joeUserId);
-
-        assertThat(fakeDataDao.selectAllUsers()).hasSize(1);
+        assertThat(fakeDataDao.selectAllUsers()).hasSize(2);
         assertThat(joeOptional.isPresent());
     }
-
-
-
-
-
-
 
     @Test
     void shouldNotSelectUserByRandomUserUid() {
@@ -63,10 +56,10 @@ class FakeDataDaoTest {
     @Test
     void shouldUpdateUser() {
         UUID joeUserId = fakeDataDao.selectAllUsers().get(0).getUserUid();
-        User joeUser = new User(joeUserId,"rosa","montana", User.Gender.FEMALE,30,"anna.montana@gmail.com");
+        User joeUser = new User(joeUserId,"rosa","montana", User.Gender.FEMALE,22,"rosa.montana@gmail.com");
         fakeDataDao.updateUser(joeUser);
         Optional<User> user = fakeDataDao.selectUserByUserUid(joeUserId);
-        assertThat(user.isPresent()).isTrue();
+        assertThat(user.isPresent());
         assertThat(fakeDataDao.selectAllUsers()).hasSize(2);
         assertThat(user.get()).isEqualToComparingFieldByField(joeUser);
     }
@@ -82,7 +75,7 @@ class FakeDataDaoTest {
     @Test
     void shouldInsertUser() {
         UUID userId = UUID.randomUUID();
-        User user = new User(userId,"anna","montana", User.Gender.FEMALE,30,"anna@gmail.com");
+        User user = new User(userId,"anna","montana", User.Gender.FEMALE,22,"anna@gmail.com");
         fakeDataDao.insertUser(userId, user);
         List<User> users = fakeDataDao.selectAllUsers();
         assertThat(users).hasSize(2);
