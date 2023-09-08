@@ -19,6 +19,7 @@ public class FakeDataDao implements UserDao {
     @Override
     public List<User> selectAllUsers() {
         return new ArrayList<>(database.values());
+
     }
 
     @Override
