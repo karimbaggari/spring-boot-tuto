@@ -29,8 +29,8 @@ public class FakeDataDao implements UserDao {
 
     @Override
     public int updateUser(User user) {
-         database.put(user.getUserUid(),user);
-        return 1;
+            database.put(user.getUserUid(), user);
+            return 1;
     }
 
     @Override

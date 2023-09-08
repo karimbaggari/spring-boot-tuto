@@ -9,6 +9,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
 
@@ -39,14 +41,38 @@ class FakeDataDaoTest {
 
     @Test
     void selectUserByUserUid() {
+        UUID annaUserUid = UUID.randomUUID();
+        User annaUser = new User(annaUserUid,"anna","montana", User.Gender.FEMALE,30,"anna.montana@gmail.com");
+        fakeDataDao.insertUser(annaUserUid,annaUser);
+        assertThat(fakeDataDao.selectAllUsers()).hasSize(2);
+        Optional<User> annaOptional = fakeDataDao.selectUserByUserUid(annaUserUid);
+        assertThat(annaOptional.isPresent()).isTrue();
+        assertThat(annaOptional.get()).isEqualToComparingFieldByField(annaUser);
     }
 
     @Test
-    void updateUser() {
+    void shouldNotSelectUserByRandomUserUid() {
+      Optional<User> user = fakeDataDao.selectUserByUserUid(UUID.randomUUID());
+      assertThat(user.isPresent()).isFalse();
+    }
+
+    @Test
+    void shouldUpdateUser() {
+        UUID joeUserId = fakeDataDao.selectAllUsers().get(0).getUserUid();
+        User joeUser = new User(joeUserId,"rosa","montana", User.Gender.FEMALE,30,"anna.montana@gmail.com");
+        fakeDataDao.updateUser(joeUser);
+        Optional<User> user = fakeDataDao.selectUserByUserUid(joeUserId);
+        assertThat(user.isPresent()).isTrue();
+        assertThat(fakeDataDao.selectAllUsers()).hasSize(2);
+        assertThat(user.get()).isEqualToComparingFieldByField(joeUser);
     }
 
     @Test
     void deleteUserByUserUid() {
+        UUID joeUserId = fakeDataDao.selectAllUsers().get(0).getUserUid();
+        fakeDataDao.deleteUserByUserUid(joeUserId);
+        assertThat(fakeDataDao.selectUserByUserUid(joeUserId).isPresent()).isFalse();
+        assertThat(fakeDataDao.selectAllUsers().isEmpty());
     }
 
     @Test
