@@ -46,16 +46,23 @@ public class UserController {
         String userUid = UUID.randomUUID().toString();
         user.setUserUid(UUID.fromString(userUid));
         int result = userService.insertUser(user);
+        return getIntegerResponseEntity(result);
+    }
+
+
+    @PutMapping( consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Integer> updateUser( @RequestBody User updatedUser) {
+        int result = userService.updateUser(updatedUser);
+        return getIntegerResponseEntity(result);
+    }
+
+    private static ResponseEntity<Integer> getIntegerResponseEntity(int result) {
         if (result == 1) {
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.badRequest().build();
     }
 
-    @ExceptionHandler(BadRequestException.class)
-    public ResponseEntity<String> handleBadRequestException(BadRequestException ex) {
-        return ResponseEntity.badRequest().body(ex.getMessage());
-    }
     class ErrorMessage {
         String errorMessage;
 
