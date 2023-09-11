@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.ws.rs.BadRequestException;
+import javax.ws.rs.QueryParam;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -27,8 +28,8 @@ public class UserController {
     }
 
     @GetMapping // Equivalent to @RequestMapping(method = RequestMethod.GET)
-    public List<User> fetchAllUsers() {
-        return userService.getAllUsers();
+    public List<User> fetchAllUsers(@QueryParam("gender") String gender) {
+        return userService.getAllUsers(Optional.ofNullable(gender));
     }
 
     @GetMapping("/{userUid}")
@@ -53,6 +54,15 @@ public class UserController {
     @PutMapping( consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Integer> updateUser( @RequestBody User updatedUser) {
         int result = userService.updateUser(updatedUser);
+        return getIntegerResponseEntity(result);
+    }
+
+    @RequestMapping(
+            method = RequestMethod.DELETE,
+            path = "{userUid}"
+    )
+    public ResponseEntity<Integer> deleteUser(@PathVariable("userUid") UUID userUid) {
+        int result = userService.removeUser(userUid);
         return getIntegerResponseEntity(result);
     }
 

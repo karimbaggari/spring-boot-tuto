@@ -39,11 +39,28 @@ class UserServiceTest {
         User rosaUser = new User(rosaUserUid,"anna","montana", User.Gender.FEMALE,22,"anna.montana@gmail.com");
         ImmutableList<User> users = new ImmutableList.Builder<User>().add(rosaUser).build();
         given(fakeDataDao.selectAllUsers()).willReturn(users);
-        List<User> allUsers = userService.getAllUsers();
+        List<User> allUsers = userService.getAllUsers(Optional.of("female"));
         assertThat(allUsers).hasSize(1);
         User user = allUsers.get(0);
 
-        assertUserFields(user);
+        assertAnnaFields(user);
+    }
+
+    @Test
+    void shouldgetAllUsersByGender() throws Exception {
+        UUID annaUserUid = UUID.randomUUID();
+        User annaUser = new User(annaUserUid,"anna","montana", User.Gender.FEMALE,22,"anna.montana@gmail.com");
+        UUID jonesUserUid = UUID.randomUUID();
+        User jonesUser = new User(jonesUserUid,"jones","montana", User.Gender.MALE,45,"jones.montana@gmail.com");
+        ImmutableList<User> users = new ImmutableList.Builder()
+                .add(annaUser)
+                .add(jonesUser)
+                .build();
+        given(fakeDataDao.selectAllUsers()).willReturn(users);
+
+        List<User> filteredUsers = userService.getAllUsers(Optional.of("FEMALE"));
+        assertThat(filteredUsers).hasSize(1);
+        assertAnnaFields(filteredUsers.get(0));
     }
 
 
@@ -56,7 +73,7 @@ class UserServiceTest {
         Optional<User> userOptional = userService.getUser(annaUid);
         assertThat(userOptional.isPresent()).isTrue();
         User user = userOptional.get();
-        assertUserFields(user);
+        assertAnnaFields(user);
     }
 
     @Test
@@ -71,7 +88,7 @@ class UserServiceTest {
         verify(fakeDataDao).selectUserByUserUid(annaUid);
         verify(fakeDataDao).updateUser(captor.capture());
         User user = captor.getValue();
-        assertUserFields(user);
+        assertAnnaFields(user);
         assertThat(resultUpdateService).isEqualTo(1);
     }
 
@@ -100,10 +117,10 @@ class UserServiceTest {
 
         User user = captor.getValue();
 
-        assertUserFields(user);
+        assertAnnaFields(user);
         assertThat(insertionResult).isEqualTo(1);
     }
-    private static void assertUserFields(User user) {
+    private static void assertAnnaFields(User user) {
         assertThat(user.getFirstName()).isEqualTo("anna");
         assertThat(user.getLastName()).isEqualTo("montana");
         assertThat(user.getGender()).isEqualTo(User.Gender.FEMALE);

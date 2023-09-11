@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -18,8 +19,17 @@ public class UserService {
         this.userDao = userDao;
     }
 
-    public List<User> getAllUsers() {
-        return userDao.selectAllUsers();
+    public List<User> getAllUsers(Optional<String> gender) {
+        List<User> users = userDao.selectAllUsers();
+        if(!gender.isPresent()) {
+            return users;
+        }
+        try {
+           User.Gender theGender = User.Gender.valueOf(gender.get().toUpperCase());
+           return users.stream().filter(user -> user.getGender().equals(theGender)).collect(Collectors.toList());
+        }catch (Exception e) {
+            throw new IllegalStateException("Invalid Gender",e);
+        }
     }
 
     public Optional<User> getUser(UUID userUid) {
