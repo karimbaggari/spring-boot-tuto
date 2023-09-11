@@ -2,6 +2,7 @@ package com.karim.springboot.Controller;
 
 import com.karim.springboot.Model.User;
 import com.karim.springboot.Service.UserService;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -74,7 +75,7 @@ public class UserController {
         return getIntegerResponseEntity(result);
     }
 
-    private static ResponseEntity<Integer> getIntegerResponseEntity(int result) {
+    private static @NotNull ResponseEntity<Integer> getIntegerResponseEntity(int result) {
         if (result == 1) {
             return ResponseEntity.ok().build();
         }
