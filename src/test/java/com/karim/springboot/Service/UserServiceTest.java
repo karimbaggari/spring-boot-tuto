@@ -14,6 +14,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
+import static org.assertj.core.api.Java6Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
@@ -61,6 +62,11 @@ class UserServiceTest {
         List<User> filteredUsers = userService.getAllUsers(Optional.of("FEMALE"));
         assertThat(filteredUsers).hasSize(1);
         assertAnnaFields(filteredUsers.get(0));
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenGenderIsInvalid() throws Exception {
+        assertThatThrownBy(() -> userService.getAllUsers(Optional.of("zaeioj"))).isInstanceOf(IllegalStateException.class).hasMessageContaining("Invalid Gender");
     }
 
 
