@@ -27,12 +27,17 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping // Equivalent to @RequestMapping(method = RequestMethod.GET)
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+
     public List<User> fetchAllUsers(@QueryParam("gender") String gender) {
         return userService.getAllUsers(Optional.ofNullable(gender));
     }
 
-    @GetMapping("/{userUid}")
+    @RequestMapping(
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            path = "{userUid}"
+    )
     public ResponseEntity<?> fetchUser(@PathVariable("userUid") UUID userUid) {
         Optional<User> userOptional = userService.getUser(userUid);
         if(userOptional.isPresent()) {
@@ -42,7 +47,7 @@ public class UserController {
         }
     }
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Integer> insertNewUser(@RequestBody User user) {
         String userUid = UUID.randomUUID().toString();
         user.setUserUid(UUID.fromString(userUid));
@@ -51,15 +56,18 @@ public class UserController {
     }
 
 
-    @PutMapping( consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Integer> updateUser( @RequestBody User updatedUser) {
+    @RequestMapping(
+            method = RequestMethod.PUT,
+            consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Integer> updateUser(@RequestBody User updatedUser) {
         int result = userService.updateUser(updatedUser);
         return getIntegerResponseEntity(result);
     }
 
     @RequestMapping(
             method = RequestMethod.DELETE,
-            path = "{userUid}"
+            path = "{userUid}",
+            produces = MediaType.APPLICATION_JSON_VALUE
     )
     public ResponseEntity<Integer> deleteUser(@PathVariable("userUid") UUID userUid) {
         int result = userService.removeUser(userUid);
