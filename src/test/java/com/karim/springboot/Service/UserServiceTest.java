@@ -1,8 +1,8 @@
-package com.karim.springboot.service;
+package com.karim.springboot.Service;
 
 import com.google.inject.internal.util.ImmutableList;
 import com.karim.springboot.DAO.FakeDataDao;
-import com.karim.springboot.model.User;
+import com.karim.springboot.Model.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -14,7 +14,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;

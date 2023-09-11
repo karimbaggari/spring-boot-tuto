@@ -1,6 +1,6 @@
 package com.karim.springboot.DAO;
 
-import com.karim.springboot.model.User;
+import com.karim.springboot.Model.User;
 import org.junit.Before;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

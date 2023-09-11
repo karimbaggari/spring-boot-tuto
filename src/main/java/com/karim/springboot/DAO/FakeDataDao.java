@@ -1,7 +1,7 @@
 package com.karim.springboot.DAO;
 
 
-import com.karim.springboot.model.User;
+import com.karim.springboot.Model.User;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
@@ -19,7 +19,7 @@ public class FakeDataDao implements UserDao {
 
     @Override
     public List<User> selectAllUsers() {
-        return new ArrayList<>(database.values());
+        return new ArrayList<User>(database.values());
 
     }
 
@@ -27,6 +27,7 @@ public class FakeDataDao implements UserDao {
     public Optional<User> selectUserByUserUid(UUID userUid) {
         return Optional.ofNullable(database.get(userUid));
     }
+
 
     @Override
     public int updateUser(User user) {

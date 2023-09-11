@@ -1,9 +1,8 @@
-package com.karim.springboot.service;
+package com.karim.springboot.Service;
 
-import com.karim.springboot.DAO.FakeDataDao;
 import com.karim.springboot.DAO.UserDao;
-import com.karim.springboot.model.User;
-import org.jvnet.hk2.annotations.Service;
+import com.karim.springboot.Model.User;
+import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -26,6 +25,8 @@ public class UserService {
     public Optional<User> getUser(UUID userUid) {
         return userDao.selectUserByUserUid(userUid);
     }
+
+
 
 
     public int updateUser(User user) {

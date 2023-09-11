@@ -1,6 +1,6 @@
 package com.karim.springboot.DAO;
 
-import com.karim.springboot.model.User;
+import com.karim.springboot.Model.User;
 
 import java.util.List;
 import java.util.Optional;
@@ -10,6 +10,7 @@ public interface UserDao {
     List<User> selectAllUsers();
 
    Optional<User> selectUserByUserUid(UUID userUid);
+
 
     int updateUser(User user);
 
